@@ -11,10 +11,10 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask layerMask;
     private bool isGround = true;
     private float horizontal;
+    private bool isRight = true;
     // Start is called before the first frame update
     void Start()
     {
-        
     }
     private void Update()
     {
@@ -28,12 +28,11 @@ public class Player : MonoBehaviour
     {
         isGround = checkGround();
         Move();
-        
     }
 
     private void Jump()
     {
-        if(Input.GetKeyDown(KeyCode.W)|| Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.W)|| Input.GetKeyDown(KeyCode.Space)|| Input.GetKeyDown(KeyCode.UpArrow))
         {
             rb.AddForce(Vector2.up * jumpForce);
         }
@@ -42,15 +41,17 @@ public class Player : MonoBehaviour
     private void Move()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
-        if(Mathf.Abs(horizontal) > 0.1f)
+        rb.velocity = new Vector2(horizontal * speed * Time.fixedDeltaTime, rb.velocity.y);
+        if (horizontal > 0)
         {
-            rb.velocity = new Vector2(horizontal * speed * Time.fixedDeltaTime, rb.velocity.y);
-            transform.rotation = Quaternion.Euler(horizontal>0?Vector3.zero:Vector3.up*180);
+            isRight = true;
         }
-        else if(isGround)
+        else if (horizontal < 0)
         {
-            rb.velocity = Vector3.zero;
+            isRight = false;
         }
+        transform.rotation = Quaternion.Euler(isRight ? Vector3.zero : Vector3.up * 180);
+
     }
     private bool checkGround()
     {
