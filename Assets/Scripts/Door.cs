@@ -15,24 +15,25 @@ public class Door : MonoBehaviour
         iconKeyE.SetActive(false);
         if (prevDoor == "DoorNext") // nếu như cửa trước là cửa vào, thì ở scene này, người chơi phải ở cửa ra
         {
-            if(gameObject.tag == "DoorBack")
+            if (gameObject.tag == "DoorBack")
                 FindObjectOfType<Player>().gameObject.transform.position = transform.position;
         }
         else if (prevDoor == "DoorBack") // ngược lại
         {
-            if(gameObject.tag == "DoorNext")
+            if (gameObject.tag == "DoorNext")
                 FindObjectOfType<Player>().gameObject.transform.position = transform.position;
         }
     }
 
     void Update()
     {
-        if(nextScene)
+        if (nextScene)
         {
-            if(this.gameObject.tag == "DoorNext") // nếu là cửa next thì nhảy đến scene tiếp theo
+            if (this.gameObject.tag == "DoorNext") // nếu là cửa next thì nhảy đến scene tiếp theo
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
+                    prevDoor = this.gameObject.tag;
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
                 }
             }
@@ -40,17 +41,17 @@ public class Door : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.E))
                 {
+                    prevDoor = this.gameObject.tag;
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
                 }
             }
-        }   
+        }
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player")
         {
             iconKeyE.SetActive(true);
-            prevDoor = this.gameObject.tag;
             nextScene = true;
         }
     }
