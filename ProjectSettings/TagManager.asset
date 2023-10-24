@@ -6,6 +6,8 @@ TagManager:
   tags:
   - DoorNext
   - DoorBack
+  - Power
+  - Electric
   layers:
   - Default
   - TransparentFX

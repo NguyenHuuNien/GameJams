@@ -10,6 +10,7 @@ public class Door : MonoBehaviour
 
     // tạo biến static prevDoor để lưu tên của cửa trước (cửa mà người chơi đi vào ở scene trước)
     private static string prevDoor = "DoorBack"; // để static để khi chuyển scene vẫn lưu
+    private bool openDoor = true; // Mặc định cửa mở (Cho trường hợp ko level không có pin)
     void Start()
     {
         iconKeyE.SetActive(false);
@@ -27,6 +28,8 @@ public class Door : MonoBehaviour
 
     void Update()
     {
+        if (FindObjectOfType<GameController>().numPin() > 0) // Nếu level có pin, update khả năng mở cửa
+            openDoor = FindObjectOfType<GameController>().isOpenDoor();
         if (nextScene)
         {
             if (this.gameObject.tag == "DoorNext") // nếu là cửa next thì nhảy đến scene tiếp theo
@@ -49,7 +52,7 @@ public class Door : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" && openDoor)
         {
             iconKeyE.SetActive(true);
             nextScene = true;
@@ -57,7 +60,7 @@ public class Door : MonoBehaviour
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player" && openDoor)
         {
             iconKeyE.SetActive(false);
             nextScene = false;
